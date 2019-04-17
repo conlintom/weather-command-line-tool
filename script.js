@@ -3,16 +3,16 @@
 const axios = require("axios");
 
 // latitude and logitude variables
-var lat = "39.7456";
-var lon = "-97.0892";
+let lat = "39.7456";
+let lon = "-97.0892";
 
-// use axios to make the request
-var result = axios.get("https://api.weather.gov/points/" + lat + "," + lon + "/forecast")
-  .then(function (result) {
+// use axios to make the request to the weather api
+axios.get("https://api.weather.gov/points/" + lat + "," + lon + "/forecast")
+  .then(function (res) {
     // get the weather information for today
-    console.log(result.data.properties.periods[0]);
+    console.log(res.data.properties.periods[0]);
   })
   // catch request errors
-  .catch(function (error) {
-    console.log(error);
+  .catch(function (err) {
+    console.log(err);
   });
