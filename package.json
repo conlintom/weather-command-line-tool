@@ -1,0 +1,24 @@
+{
+  "name": "weather-command-line-tool",
+  "version": "1.0.0",
+  "description": "Experimenting with a command line tool to collect weather information for a given location.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/conlintom/weather-command-line-tool.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/conlintom/weather-command-line-tool/issues"
+  },
+  "homepage": "https://github.com/conlintom/weather-command-line-tool#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "require": "^2.4.20"
+  }
+}
