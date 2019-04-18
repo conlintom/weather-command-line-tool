@@ -2,7 +2,7 @@
   "name": "weather-command-line-tool",
   "version": "1.0.0",
   "description": "Experimenting with a command line tool to collect weather information for a given location.",
-  "main": "index.js",
+  "main": "index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,7 +19,10 @@
   "homepage": "https://github.com/conlintom/weather-command-line-tool#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "babel": "^6.23.0",
+    "babel-register": "^6.26.0",
     "ink": "^2.1.1",
-    "react": "^16.8.6"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   }
 }
