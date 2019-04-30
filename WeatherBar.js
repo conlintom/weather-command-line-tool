@@ -1,11 +1,15 @@
+require('import-jsx');
 const React = require('react');
 const {render, Box, Color} = require('ink');
 const axios = require('axios');
 
 
 class WeatherBar extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, lat, lon) {
+        super(props, lat, lon);
+
+        this.lat = lat;
+        this.lon = lon;
 
         this.state = {
             periods: [],
@@ -20,7 +24,7 @@ class WeatherBar extends React.Component {
         return (
             <Box>
                 <Color green>   
-                    Weather: 
+                    Weather:  
                 </Color>
                 <Color blue>
                     {latest}
@@ -29,14 +33,15 @@ class WeatherBar extends React.Component {
         );   
     }
     componentDidMount() {
-        // latitude and logitude variables
-        let lat = "39.7456";
-        let lon = "-97.0892";
+        // latitude and logitude variables taken from process.argv
+        // 42.349327, -71.048720
+        let latitude = this.lat;
+        let longitude = this.lon;
 
         let self = this;
 
         // use axios to make the request to the weather api
-        axios.get("https://api.weather.gov/points/" + lat + "," + lon + "/forecast")
+        axios.get("https://api.weather.gov/points/" + latitude + "," + longitude + "/forecast")
             .then(function (res) {
                 // get the weather information for the current time period
                 //console.log(res.data.properties.periods[0]);
@@ -52,3 +57,5 @@ class WeatherBar extends React.Component {
 }   
 
 render(<WeatherBar/>);
+
+module.exports = WeatherBar;
