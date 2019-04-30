@@ -1,5 +1,4 @@
 
-const webpack = require('webpack');
 const React = require('react');
 const {render, Box} = require('ink');
 const TextInput = require('ink-text-input')
