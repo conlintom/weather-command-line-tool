@@ -1,5 +1,5 @@
 const React = require('react');
-const {render, Box, Color, Text} = require('ink');
+const {render, Box, Color} = require('ink');
 const axios = require('axios');
 
 
@@ -17,11 +17,9 @@ class WeatherBar extends React.Component {
         // if periods isn't 0 length - strigify the first element of periods, otherwise indicate that the 
         // request is loading. 
         const latest = periods.length ? JSON.stringify(periods[0], null, 2) : notRecieved;
-        // split the string on 
-        // const perParse = (latest == notRecieved) ? "" : latest.split(",");
         return (
             <Box>
-                <Color green>
+                <Color green>   
                     Weather: 
                 </Color>
                 <Color blue>

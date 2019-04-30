@@ -1,3 +1,3 @@
 
-//require('import-jsx')('./UserInput.js');
-require('import-jsx')('./WeatherBar');
+require('import-jsx')('./LatLonInput.js');
+// require('import-jsx')('./WeatherBar');
