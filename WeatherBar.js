@@ -30,8 +30,11 @@ class WeatherBar extends React.Component {
     componentDidMount() {
         // latitude and logitude variables taken from process.argv
         // Take the last two elements from process.argv to get the latitude and longitude
-        const lat = process.argv[2];
-        const lon = process.argv[3];
+        // defaultLat and defaultLon added if arguments are not supplied
+        const defaultLat = 42.349295;
+        const defaultLon = -71.048731
+        const lat = process.argv[2].length ? process.argv[2].length : defaultLat;
+        const lon = process.argv[3].length ? process.argv[3].length : defaultLon;
 
         console.log("This is latitude: " + lat);
         console.log("This is longitude: " + lon);
