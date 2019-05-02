@@ -1,6 +1,9 @@
 const React = require('react');
 const {render, Box, Color} = require('ink');
 const axios = require('axios');
+const appInsights = require('applicationinsights');
+
+appInsights.setup('a3ac3032-ad4a-4a19-8f00-eef544b0a284').start();
 
 class WeatherBar extends React.Component {
     constructor(props) {
@@ -32,15 +35,12 @@ class WeatherBar extends React.Component {
         // Take the last two elements from process.argv to get the latitude and longitude
         // defaultLat and defaultLon added if arguments are not supplied
         const defaultLat = 42.349295;
-        const defaultLon = -71.048731
-        const lat = process.argv[2].length ? process.argv[2].length : defaultLat;
-        const lon = process.argv[3].length ? process.argv[3].length : defaultLon;
-
-        console.log("This is latitude: " + lat);
-        console.log("This is longitude: " + lon);
+        const defaultLon = -71.048731;
+        const lat = process.argv[2] == 'undefined' ? process.argv[2] : defaultLat;
+        const lon = process.argv[3] == 'undefined' ? process.argv[3] : defaultLon;
 
         let self = this;
-
+        
         // use axios to make the request to the weather api
         axios.get("https://api.weather.gov/points/" + lat + "," + lon + "/forecast")
             .then(function (res) {
