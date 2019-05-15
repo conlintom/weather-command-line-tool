@@ -15,27 +15,48 @@ class WeatherBar extends React.Component {
         const notRecieved = 'Loading'
         // if periods isn't 0 length - strigify the first element of periods, otherwise indicate that the 
         // request is loading. 
-        let per1 = periods.length ? periods[0] : notRecieved;
-        if (typeof per1 == 'string') console.log('string', per1);
-        if (typeof per1 == 'object') console.log('object', per1[Object.keys(per1)[5]]);
-        return(
-            <Box>
-                Box
-            </Box>
-        );
-        /*
+
+        // Get the entire detail for the current weather
         const latest = periods.length ? JSON.stringify(periods[0], null, 2) : notRecieved;
-        return (
-            <Box>
-                <Color green>   
-                    The weather is:  
-                </Color>
-                <Color blue>
-                    {latest}
-                </Color>
-            </Box>
-        ); 
-        */
+        // Get the temperature to color the data
+        const temp = periods.length ? periods[0] : notRecieved;
+        // Cold condition
+        if (temp < 40) {
+            return(
+                <Box>
+                    <Color rgb={[166, 168, 167]}>   
+                        The weather is:  
+                    </Color>
+                    <Color blue>
+                        {latest}
+                    </Color>
+                </Box>
+            );
+        // mild condition
+        } else if (temp > 40 && temp < 70 ) {
+            return(
+                <Box>
+                    <Color rgb={[166, 168, 167]}>   
+                        The weather is:  
+                    </Color>
+                    <Color rgb={[234, 7, 7]}>
+                        {latest}
+                    </Color>
+                </Box>
+            );
+        // Hot condition
+        } else {
+            return(
+                <Box>
+                    <Color rgb={[166, 168, 167]}>   
+                        The weather is:  
+                    </Color>
+                    <Color rgb={[1, 178, 69]}>
+                        {latest}
+                    </Color>
+                </Box>
+            );
+        }
           
     }
     componentDidMount() {
