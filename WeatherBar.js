@@ -14,49 +14,72 @@ class WeatherBar extends React.Component {
         const periods = this.state.periods;
         const notRecieved = 'Loading'
         // if periods isn't 0 length - strigify the first element of periods, otherwise indicate that the 
-        // request is loading. 
-
+        // request is loading.
+        const freezing = 32;
+        const cold = 40;
+        const mild = 70;
         // Get the entire detail for the current weather
         const latest = periods.length ? JSON.stringify(periods[0], null, 2) : notRecieved;
         // Get the temperature to color the data
-        const temp = periods.length ? periods[0] : notRecieved;
-        // Cold condition
-        if (temp < 40) {
+        const perObj = periods.length ? periods[0] : notRecieved;
+        const temp = perObj[Object.keys(perObj)[5]]
+        // freezing condition
+        if (temp <= freezing) {
             return(
                 <Box>
-                    <Color rgb={[166, 168, 167]}>   
-                        The weather is:  
+                    <Color rgb={[173, 171, 171]}>   
+                        The temperature is freezing:   
                     </Color>
                     <Color blue>
-                        {latest}
-                    </Color>
-                </Box>
-            );
-        // mild condition
-        } else if (temp > 40 && temp < 70 ) {
-            return(
-                <Box>
-                    <Color rgb={[166, 168, 167]}>   
-                        The weather is:  
-                    </Color>
-                    <Color rgb={[234, 7, 7]}>
-                        {latest}
-                    </Color>
-                </Box>
-            );
-        // Hot condition
-        } else {
-            return(
-                <Box>
-                    <Color rgb={[166, 168, 167]}>   
-                        The weather is:  
-                    </Color>
-                    <Color rgb={[1, 178, 69]}>
-                        {latest}
+                        {temp}
                     </Color>
                 </Box>
             );
         }
+        // Cold condition
+        else if (temp <= cold && temp > freezing) {
+            return(
+                <Box>
+                    <Color rgb={[173, 171, 171]}>   
+                        The temperature is cold:  
+                    </Color>
+                    <Color blue>
+                        {temp}
+                    </Color>
+                </Box>
+            );
+        // mild condition
+        } else if (temp >= cold && temp < mild ) {
+            return(
+                <Box>
+                    <Color rgb={[173, 171, 171]}>   
+                        The temperature is mild: 
+                    </Color>
+                    <Color rgb={[37, 232, 76]}>
+                        {temp}
+                    </Color>
+                </Box>
+            );
+        // Hot condition
+        } else if (temp > mild) {
+            return(
+                <Box>
+                    <Color rgb={[173, 171, 171]}>   
+                        The temperature is hot: 
+                    </Color>
+                    <Color rgb={[255, 0, 0]}>
+                        {temp}
+                    </Color>
+                </Box>
+            );
+        } else {
+            return(
+                <Box red>
+                    Temperature Not Found!
+                </Box>
+            );
+        }
+        
           
     }
     componentDidMount() {
