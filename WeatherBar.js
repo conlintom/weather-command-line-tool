@@ -3,7 +3,7 @@ Adapter Pattern
 */
 
 const React = require('react');
-const {render, Box, Color} = require('ink');
+const {render, Box, Color, Text} = require('ink');
 const axios = require('axios');
 const program = require('commander');
 
@@ -26,69 +26,107 @@ class WeatherBar extends React.Component {
         //const latest = periods.length ? JSON.stringify(periods[0], null, 2) : notRecieved;
         // Get the temperature to color the data
         const perObj = periods.length ? periods[0] : notRecieved;
+
+        const dayTime = (perObj.length != 1) ? perObj[Object.keys(perObj)[4]] : notRecieved;
+        const timeDay = (dayTime == true) ? 'day time' : 'night time';
+        const tempMeasure = (perObj.length != 1) ? perObj[Object.keys(perObj)[6]] : notRecieved;
         const temp = (perObj.length != 1) ? perObj[Object.keys(perObj)[5]] : notRecieved;
+        const windSpeed = (perObj.length != 1) ? perObj[Object.keys(perObj)[8]] : notRecieved;
+        const detailForecast = (perObj.length != 1) ? perObj[Object.keys(perObj)[12]] : notRecieved;
         // Freezing condition
         if (temp <= freezing) {
             return(
-                <Box> 
-                    <Box paddingRight={1}>
-                        <Color rgb={[173, 171, 171]}>   
-                            The temperature is freezing:   
-                        </Color>
-                    </Box>
-                    <Box>
-                        <Color blue>
-                            {temp} degrees {perObj[Object.keys(perObj)[6]]}
-                        </Color>
-                    </Box>
+                <Box textWrap = "wrap" padding = {2}> 
+                    <Color rgb={[173, 171, 171]}>   
+                        <Text bold>{'The'} {timeDay} {'temperature is freezing:\n'}</Text>
+                    </Color>
+                    <Color rgb={[153, 0, 153]}>
+                        {temp} degrees {tempMeasure}{'\n'}
+                    </Color>
+                    <Color rgb={[173, 171, 171]}>
+                        <Text bold>{'The windspeed is:'}{'\n'}</Text>
+                    </Color>
+                    <Color rgb={[153, 0, 153]}>
+                        {windSpeed}{'\n'}
+                    </Color>
+                    <Color rgb={[173, 171, 171]}>
+                        <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
+                    </Color>
+                    <Color rgb={[153, 0, 153]}>
+                        {detailForecast}
+                    </Color>
                 </Box>
             );
         // Cold condition
         } else if (temp <= cold && temp > freezing) {
             return(
-                <Box>
-                        <Box paddingRight={1}>
-                            <Color rgb={[173, 171, 171]}>   
-                                The temperature is cold:  
-                            </Color>
-                        </Box>
-                        <Box>
-                            <Color blue>
-                                {temp} degrees {perObj[Object.keys(perObj)[6]]}
-                            </Color>
-                        </Box>
+                <Box textWrap = "wrap" padding = {2}>
+                    <Color rgb={[173, 171, 171]}>   
+                        <Text bold>{'The'} {timeDay} {'temperature is cold:\n'}</Text>
+                    </Color>
+                    <Color blue>
+                        {temp} degrees {tempMeasure}{'\n'}
+                    </Color>
+                    <Color rgb={[173, 171, 171]}>
+                        <Text bold>{'The windspeed is:'}{'\n'}</Text>
+                    </Color>
+                    <Color blue>
+                        {windSpeed}{'\n'}
+                    </Color>
+                    <Color rgb={[173, 171, 171]}>
+                        <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
+                    </Color>
+                    <Color blue>
+                        {detailForecast}
+                    </Color>
                 </Box>
             );
-        // mild condition
+        // Mild condition
         } else if (temp >= cold && temp < mild ) {
             return(
-                <Box>
-                        <Box paddingRight={1}>
-                            <Color rgb={[173, 171, 171]}>   
-                                The temperature is mild: 
-                            </Color>
-                        </Box>
-                        <Box>
-                            <Color rgb={[37, 232, 76]}>
-                                {temp} degrees {perObj[Object.keys(perObj)[6]]}
-                            </Color>
-                        </Box>
+                <Box textWrap = "wrap" padding = {3}>
+                    <Color rgb={[173, 171, 171]}>   
+                        <Text bold>{'The'} {timeDay} {'temperature is mild:\n'}</Text>
+                    </Color>
+                    <Color rgb={[37, 232, 76]}>
+                        {temp} degrees {tempMeasure}{'\n'}
+                    </Color>
+                    <Color rgb={[173, 171, 171]}>
+                        <Text bold>{'The windspeed is:'}{'\n'}</Text>
+                    </Color>
+                    <Color rgb={[37, 232, 76]}>
+                        {windSpeed}{'\n'}
+                    </Color>
+                    <Color rgb={[173, 171, 171]}>
+                        <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
+                    </Color>
+                    <Color rgb={[37, 232, 76]}>
+                        {detailForecast}
+                    </Color>
                 </Box>
             );
         // Hot condition
         } else if (temp > mild) {
             return(
-                <Box>
-                    <Box>
-                        <Color rgb={[173, 171, 171]}>   
-                            The temperature is hot: 
-                        </Color>
-                    </Box>
-                    <Box>
-                        <Color rgb={[255, 0, 0]}>
-                            {temp} degrees {perObj[Object.keys(perObj)[6]]}
-                        </Color>
-                    </Box>
+                <Box textWrap = "wrap" padding = {2}>
+                    <Color rgb={[173, 171, 171]}>   
+                        <Text bold>{'The'} {timeDay} {'temperature is hot:\n'}</Text>
+                    </Color>
+                    <Color rgb={[255, 0, 0]}>
+                        {temp} degrees {tempMeasure}{'\n'}
+                    </Color>
+                    <Color rgb={[173, 171, 171]}>
+                        <Text bold>{'The windspeed is:'}{'\n'}</Text>
+                    </Color>
+                    <Color rgb={[255, 0, 0]}>
+                        {windSpeed}{'\n'}
+                    </Color>
+                    <Color rgb={[173, 171, 171]}>
+                        <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
+                    </Color>
+                    <Color rgb={[255, 0, 0]}>
+                        {detailForecast}
+                    </Color>
                 </Box>
             );
         } else {
