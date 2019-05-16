@@ -1,3 +1,7 @@
+/*
+Adapter Pattern
+*/
+
 const React = require('react');
 const {render, Box, Color} = require('ink');
 const axios = require('axios');
@@ -19,68 +23,81 @@ class WeatherBar extends React.Component {
         const cold = 40;
         const mild = 70;
         // Get the entire detail for the current weather
-        const latest = periods.length ? JSON.stringify(periods[0], null, 2) : notRecieved;
+        //const latest = periods.length ? JSON.stringify(periods[0], null, 2) : notRecieved;
         // Get the temperature to color the data
         const perObj = periods.length ? periods[0] : notRecieved;
-        const temp = perObj[Object.keys(perObj)[5]]
-        // freezing condition
+        const temp = (perObj.length != 1) ? perObj[Object.keys(perObj)[5]] : notRecieved;
+        // Freezing condition
         if (temp <= freezing) {
             return(
-                <Box>
-                    <Color rgb={[173, 171, 171]}>   
-                        The temperature is freezing:   
-                    </Color>
-                    <Color blue>
-                        {temp}
-                    </Color>
+                <Box> 
+                    <Box paddingRight={1}>
+                        <Color rgb={[173, 171, 171]}>   
+                            The temperature is freezing:   
+                        </Color>
+                    </Box>
+                    <Box>
+                        <Color blue>
+                            {temp} degrees {perObj[Object.keys(perObj)[6]]}
+                        </Color>
+                    </Box>
                 </Box>
             );
-        }
         // Cold condition
-        else if (temp <= cold && temp > freezing) {
+        } else if (temp <= cold && temp > freezing) {
             return(
                 <Box>
-                    <Color rgb={[173, 171, 171]}>   
-                        The temperature is cold:  
-                    </Color>
-                    <Color blue>
-                        {temp}
-                    </Color>
+                        <Box paddingRight={1}>
+                            <Color rgb={[173, 171, 171]}>   
+                                The temperature is cold:  
+                            </Color>
+                        </Box>
+                        <Box>
+                            <Color blue>
+                                {temp} degrees {perObj[Object.keys(perObj)[6]]}
+                            </Color>
+                        </Box>
                 </Box>
             );
         // mild condition
         } else if (temp >= cold && temp < mild ) {
             return(
                 <Box>
-                    <Color rgb={[173, 171, 171]}>   
-                        The temperature is mild: 
-                    </Color>
-                    <Color rgb={[37, 232, 76]}>
-                        {temp}
-                    </Color>
+                        <Box paddingRight={1}>
+                            <Color rgb={[173, 171, 171]}>   
+                                The temperature is mild: 
+                            </Color>
+                        </Box>
+                        <Box>
+                            <Color rgb={[37, 232, 76]}>
+                                {temp} degrees {perObj[Object.keys(perObj)[6]]}
+                            </Color>
+                        </Box>
                 </Box>
             );
         // Hot condition
         } else if (temp > mild) {
             return(
                 <Box>
-                    <Color rgb={[173, 171, 171]}>   
-                        The temperature is hot: 
-                    </Color>
-                    <Color rgb={[255, 0, 0]}>
-                        {temp}
-                    </Color>
+                    <Box>
+                        <Color rgb={[173, 171, 171]}>   
+                            The temperature is hot: 
+                        </Color>
+                    </Box>
+                    <Box>
+                        <Color rgb={[255, 0, 0]}>
+                            {temp} degrees {perObj[Object.keys(perObj)[6]]}
+                        </Color>
+                    </Box>
                 </Box>
             );
         } else {
             return(
                 <Box red>
-                    Temperature Not Found!
+                    {temp}
                 </Box>
             );
-        }
-        
-          
+        }          
     }
     componentDidMount() {
         // implement commander and take latidude and longitude variables from here
