@@ -25,25 +25,25 @@ class WeatherBar extends React.Component {
         };
     }
 
-    formatOutput(temp, type, time, measure, speed, detail, headerColor, textColor){
+    formatOutput(temp, type, time, measure, speed, detail){
        return(
             <Box textWrap = 'wrap' padding = {2}> 
-                <Color rgb={headerColor}>   
+                <Color rgb={colorMap.header}>   
                     <Text bold>{'The'} {type} {time} {'temperature is: \n'}</Text>
                 </Color>
-                <Color rgb={textColor}>
+                <Color rgb={colorMap[type]}>
                     {temp} degrees {measure}{'\n'}
                 </Color>
-                <Color rgb={headerColor}>
+                <Color rgb={colorMap.header}>
                     <Text bold>{'The wind speed is:'}{'\n'}</Text>
                 </Color>
-                <Color rgb={textColor}>
+                <Color rgb={colorMap[type]}>
                     {speed}{'\n'}
                 </Color>
-                <Color rgb={headerColor}>
+                <Color rgb={colorMap.header}>
                     <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
                 </Color>
-                <Color rgb={textColor}>
+                <Color rgb={colorMap[type]}>
                     {detail}
                 </Color>
             </Box>
@@ -80,11 +80,11 @@ class WeatherBar extends React.Component {
         // Assign tempType
         (temp <= freezing) ? tempType = 'freezing' : tempType;
         (temp <= cold && temp > freezing) ? tempType = 'cold' : tempType;
-        (temp >= cold && temp < mild) ? tempType = 'mild': tempType;
+        (temp >= cold && temp <= mild) ? tempType = 'mild': tempType;
         (temp > mild) ? tempType = 'hot' : tempType;
 
         return(
-            this.formatOutput(temp, tempType, timeDay, tempMeasure, windSpeed, detailForecast, colorMap.header, colorMap[tempType])
+            this.formatOutput(temp, tempType, timeDay, tempMeasure, windSpeed, detailForecast, colorMap.header)
         );     
     }
     componentDidMount() {
@@ -113,11 +113,11 @@ class WeatherBar extends React.Component {
             })
             // catch request errors
             .catch(function (err) {
-                console.log(err);
+                const objErr = err.response;
+                console.log(objErr.data['detail']);
+                console.log('Status: ', objErr.data['status'], ' Not Found');
+                console.log('Please make sure appropriate latitude and logitude values are requested and within the United States. ');
             });
     }
-
-    
-}   
-
+}
 render(<WeatherBar/>)
