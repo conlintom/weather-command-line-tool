@@ -27,7 +27,7 @@ class WeatherBar extends React.Component {
 
     formatOutput(temp, type, time, measure, speed, detail, headerColor, textColor){
        return(
-        <Box textWrap = 'wrap' padding = {2}> 
+            <Box textWrap = 'wrap' padding = {2}> 
                 <Color rgb={headerColor}>   
                     <Text bold>{'The'} {type} {time} {'temperature is: \n'}</Text>
                 </Color>
@@ -85,112 +85,7 @@ class WeatherBar extends React.Component {
 
         return(
             this.formatOutput(temp, tempType, timeDay, tempMeasure, windSpeed, detailForecast, colorMap.header, colorMap[tempType])
-        );
-        /*
-        // Freezing condition
-        if (temp <= freezing) {
-            return(
-                <Box textWrap = 'wrap' padding = {2}> 
-                    <Color rgb={colorMap.header}>   
-                        <Text bold>{'The'} {timeDay} {'temperature is freezing:\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.freezing}>
-                        {temp} degrees {tempMeasure}{'\n'}
-                    </Color>
-                    <Color rgb={colorMap.header}>
-                        <Text bold>{'The windspeed is:'}{'\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.freezing}>
-                        {windSpeed}{'\n'}
-                    </Color>
-                    <Color rgb={colorMap.header}>
-                        <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.freezing}>
-                        {detailForecast}
-                    </Color>
-                </Box>
-            );
-        // Cold condition
-        } else if (temp <= cold && temp > freezing) {
-            return(
-                <Box textWrap = "wrap" padding = {2}>
-                    <Color rgb={colorMap.header}>   
-                        <Text bold>{'The'} {timeDay} {'temperature is cold:\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.cold}>
-                        {temp} degrees {tempMeasure}{'\n'}
-                    </Color>
-                    <Color rgb={colorMap.header}>
-                        <Text bold>{'The windspeed is:'}{'\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.cold}>
-                        {windSpeed}{'\n'}
-                    </Color>
-                    <Color rgb={colorMap.header}>
-                        <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.cold}>
-                        {detailForecast}
-                    </Color>
-                </Box>
-            );
-        // Mild condition
-        } else if (temp >= cold && temp < mild ) {
-            return(
-                <Box textWrap = "wrap" padding = {3}>
-                    <Color rgb={colorMap.header}>   
-                        <Text bold>{'The'} {timeDay} {'temperature is mild:\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.mild}>
-                        {temp} degrees {tempMeasure}{'\n'}
-                    </Color>
-                    <Color rgb={colorMap.header}>
-                        <Text bold>{'The windspeed is:'}{'\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.mild}>
-                        {windSpeed}{'\n'}
-                    </Color>
-                    <Color rgb={colorMap.header}>
-                        <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.mild}>
-                        {detailForecast}
-                    </Color>
-                </Box>
-            );
-        // Hot condition
-        } else if (temp > mild) {
-            return(
-                <Box textWrap = "wrap" padding = {2}>
-                    <Color rgb={colorMap.header}>   
-                        <Text bold>{'The'} {timeDay} {'temperature is hot:\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.hot}>
-                        {temp} degrees {tempMeasure}{'\n'}
-                    </Color>
-                    <Color rgb={colorMap.header}>
-                        <Text bold>{'The windspeed is:'}{'\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.hot}>
-                        {windSpeed}{'\n'}
-                    </Color>
-                    <Color rgb={colorMap.header}>
-                        <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
-                    </Color>
-                    <Color rgb={colorMap.hot}>
-                        {detailForecast}
-                    </Color>
-                </Box>
-            );
-        } else {
-            return(
-                <Box red>
-                    {temp}
-                </Box>
-            );
-        }
-        */       
+        );     
     }
     componentDidMount() {
        // implemented commander
