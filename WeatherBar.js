@@ -1,11 +1,21 @@
-/*
-Adapter Pattern
-*/
 
 const React = require('react');
 const {render, Box, Color, Text} = require('ink');
 const axios = require('axios');
 const program = require('commander');
+
+// todo - ticker
+
+
+// create color map to hold colors
+const colorMap  = {
+    header: [173, 171, 171],
+    freezing: [153, 0, 153], 
+    cold: [41, 168, 242], 
+    mild: [37, 232, 76], 
+    hot: [255, 0, 0]
+};
+
 
 class WeatherBar extends React.Component {
     constructor(props) {
@@ -14,45 +24,89 @@ class WeatherBar extends React.Component {
             periods: [],
         };
     }
+
+    formatOutput(temp, type, time, measure, speed, detail, headerColor, textColor){
+       return(
+        <Box textWrap = 'wrap' padding = {2}> 
+                <Color rgb={headerColor}>   
+                    <Text bold>{'The'} {type} {time} {'temperature is: \n'}</Text>
+                </Color>
+                <Color rgb={textColor}>
+                    {temp} degrees {measure}{'\n'}
+                </Color>
+                <Color rgb={headerColor}>
+                    <Text bold>{'The wind speed is:'}{'\n'}</Text>
+                </Color>
+                <Color rgb={textColor}>
+                    {speed}{'\n'}
+                </Color>
+                <Color rgb={headerColor}>
+                    <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
+                </Color>
+                <Color rgb={textColor}>
+                    {detail}
+                </Color>
+            </Box>
+       );
+    }
+
     render() {
         const periods = this.state.periods;
-        const notRecieved = 'Loading'
         // if periods isn't 0 length - strigify the first element of periods, otherwise indicate that the 
         // request is loading.
+        
+        // Check if periods has values
+        if (!periods.length){
+            return (
+                <Box>
+                    Loading...
+                </Box>
+            );
+        }
+
+        // Get the temperature, windspeed, time of day, and detailed forcast
+        const perObj = periods[0];
+        const timeDay = (perObj[Object.keys(perObj)[4]] == true) ? 'day time' : 'night time';
+        const tempMeasure = perObj[Object.keys(perObj)[6]];
+        const temp = perObj[Object.keys(perObj)[5]];
+        const windSpeed = perObj[Object.keys(perObj)[8]];
+        const detailForecast = perObj[Object.keys(perObj)[12]];
+
         const freezing = 32;
         const cold = 40;
         const mild = 70;
-        // Get the entire detail for the current weather
-        //const latest = periods.length ? JSON.stringify(periods[0], null, 2) : notRecieved;
-        // Get the temperature to color the data
-        const perObj = periods.length ? periods[0] : notRecieved;
+        let tempType = '';
 
-        const dayTime = (perObj.length != 1) ? perObj[Object.keys(perObj)[4]] : notRecieved;
-        const timeDay = (dayTime == true) ? 'day time' : 'night time';
-        const tempMeasure = (perObj.length != 1) ? perObj[Object.keys(perObj)[6]] : notRecieved;
-        const temp = (perObj.length != 1) ? perObj[Object.keys(perObj)[5]] : notRecieved;
-        const windSpeed = (perObj.length != 1) ? perObj[Object.keys(perObj)[8]] : notRecieved;
-        const detailForecast = (perObj.length != 1) ? perObj[Object.keys(perObj)[12]] : notRecieved;
+        // Assign tempType
+        (temp <= freezing) ? tempType = 'freezing' : tempType;
+        (temp <= cold && temp > freezing) ? tempType = 'cold' : tempType;
+        (temp >= cold && temp < mild) ? tempType = 'mild': tempType;
+        (temp > mild) ? tempType = 'hot' : tempType;
+
+        return(
+            this.formatOutput(temp, tempType, timeDay, tempMeasure, windSpeed, detailForecast, colorMap.header, colorMap[tempType])
+        );
+        /*
         // Freezing condition
         if (temp <= freezing) {
             return(
-                <Box textWrap = "wrap" padding = {2}> 
-                    <Color rgb={[173, 171, 171]}>   
+                <Box textWrap = 'wrap' padding = {2}> 
+                    <Color rgb={colorMap.header}>   
                         <Text bold>{'The'} {timeDay} {'temperature is freezing:\n'}</Text>
                     </Color>
-                    <Color rgb={[153, 0, 153]}>
+                    <Color rgb={colorMap.freezing}>
                         {temp} degrees {tempMeasure}{'\n'}
                     </Color>
-                    <Color rgb={[173, 171, 171]}>
+                    <Color rgb={colorMap.header}>
                         <Text bold>{'The windspeed is:'}{'\n'}</Text>
                     </Color>
-                    <Color rgb={[153, 0, 153]}>
+                    <Color rgb={colorMap.freezing}>
                         {windSpeed}{'\n'}
                     </Color>
-                    <Color rgb={[173, 171, 171]}>
+                    <Color rgb={colorMap.header}>
                         <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
                     </Color>
-                    <Color rgb={[153, 0, 153]}>
+                    <Color rgb={colorMap.freezing}>
                         {detailForecast}
                     </Color>
                 </Box>
@@ -61,22 +115,22 @@ class WeatherBar extends React.Component {
         } else if (temp <= cold && temp > freezing) {
             return(
                 <Box textWrap = "wrap" padding = {2}>
-                    <Color rgb={[173, 171, 171]}>   
+                    <Color rgb={colorMap.header}>   
                         <Text bold>{'The'} {timeDay} {'temperature is cold:\n'}</Text>
                     </Color>
-                    <Color blue>
+                    <Color rgb={colorMap.cold}>
                         {temp} degrees {tempMeasure}{'\n'}
                     </Color>
-                    <Color rgb={[173, 171, 171]}>
+                    <Color rgb={colorMap.header}>
                         <Text bold>{'The windspeed is:'}{'\n'}</Text>
                     </Color>
-                    <Color blue>
+                    <Color rgb={colorMap.cold}>
                         {windSpeed}{'\n'}
                     </Color>
-                    <Color rgb={[173, 171, 171]}>
+                    <Color rgb={colorMap.header}>
                         <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
                     </Color>
-                    <Color blue>
+                    <Color rgb={colorMap.cold}>
                         {detailForecast}
                     </Color>
                 </Box>
@@ -85,22 +139,22 @@ class WeatherBar extends React.Component {
         } else if (temp >= cold && temp < mild ) {
             return(
                 <Box textWrap = "wrap" padding = {3}>
-                    <Color rgb={[173, 171, 171]}>   
+                    <Color rgb={colorMap.header}>   
                         <Text bold>{'The'} {timeDay} {'temperature is mild:\n'}</Text>
                     </Color>
-                    <Color rgb={[37, 232, 76]}>
+                    <Color rgb={colorMap.mild}>
                         {temp} degrees {tempMeasure}{'\n'}
                     </Color>
-                    <Color rgb={[173, 171, 171]}>
+                    <Color rgb={colorMap.header}>
                         <Text bold>{'The windspeed is:'}{'\n'}</Text>
                     </Color>
-                    <Color rgb={[37, 232, 76]}>
+                    <Color rgb={colorMap.mild}>
                         {windSpeed}{'\n'}
                     </Color>
-                    <Color rgb={[173, 171, 171]}>
+                    <Color rgb={colorMap.header}>
                         <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
                     </Color>
-                    <Color rgb={[37, 232, 76]}>
+                    <Color rgb={colorMap.mild}>
                         {detailForecast}
                     </Color>
                 </Box>
@@ -109,22 +163,22 @@ class WeatherBar extends React.Component {
         } else if (temp > mild) {
             return(
                 <Box textWrap = "wrap" padding = {2}>
-                    <Color rgb={[173, 171, 171]}>   
+                    <Color rgb={colorMap.header}>   
                         <Text bold>{'The'} {timeDay} {'temperature is hot:\n'}</Text>
                     </Color>
-                    <Color rgb={[255, 0, 0]}>
+                    <Color rgb={colorMap.hot}>
                         {temp} degrees {tempMeasure}{'\n'}
                     </Color>
-                    <Color rgb={[173, 171, 171]}>
+                    <Color rgb={colorMap.header}>
                         <Text bold>{'The windspeed is:'}{'\n'}</Text>
                     </Color>
-                    <Color rgb={[255, 0, 0]}>
+                    <Color rgb={colorMap.hot}>
                         {windSpeed}{'\n'}
                     </Color>
-                    <Color rgb={[173, 171, 171]}>
+                    <Color rgb={colorMap.header}>
                         <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
                     </Color>
-                    <Color rgb={[255, 0, 0]}>
+                    <Color rgb={colorMap.hot}>
                         {detailForecast}
                     </Color>
                 </Box>
@@ -135,12 +189,11 @@ class WeatherBar extends React.Component {
                     {temp}
                 </Box>
             );
-        }          
+        }
+        */       
     }
     componentDidMount() {
-        // implement commander and take latidude and longitude variables from here
-        // set default lat lon here
-
+       // implemented commander
         program
             .version('0.1.0')
             .description('An application for current weather')
@@ -155,6 +208,8 @@ class WeatherBar extends React.Component {
         let self = this;
 
         // use axios to make the request to the weather api - promise
+
+        // todo - wrap api call in a class - adapter
         axios.get("https://api.weather.gov/points/" + lat + "," + lon + "/forecast")
             .then(function (res) {
                 self.setState({
@@ -166,6 +221,7 @@ class WeatherBar extends React.Component {
                 console.log(err);
             });
     }
+
     
 }   
 
