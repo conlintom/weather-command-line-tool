@@ -6,7 +6,6 @@ const program = require('commander');
 
 // todo - ticker
 
-
 // create color map to hold colors
 const colorMap  = {
     header: [173, 171, 171],
@@ -100,11 +99,15 @@ class WeatherBar extends React.Component {
         let lat = program.latitude;
         let lon = program.longitude;
 
-        let self = this;
-
         // use axios to make the request to the weather api - promise
 
         // todo - wrap api call in a class - adapter
+
+        const req = new WeatherAPIRequest(lat, lon);
+
+        req.makeRequest();
+
+        /*
         axios.get("https://api.weather.gov/points/" + lat + "," + lon + "/forecast")
             .then(function (res) {
                 self.setState({
@@ -118,6 +121,34 @@ class WeatherBar extends React.Component {
                 console.log('Status: ', objErr.data['status'], ' Not Found');
                 console.log('Please make sure appropriate latitude and logitude values are requested and within the United States. ');
             });
+        */
     }
 }
+
+class WeatherAPIRequest {
+    constructor(lat, lon) {
+        this.lat = lat;
+        this.lon = lon;
+    }
+    makeRequest() {
+
+        let self = this;
+
+        axios.get("https://api.weather.gov/points/" + this.lat + "," + this.lon + "/forecast")
+            .then(function (res) {
+                self.setState({
+                    // data returned has keys: data, properies, and periods
+                    periods: res.data.properties.periods
+                });
+            })
+            // catch request errors
+            .catch(function (err) {
+                const objErr = err.response;
+                console.log(objErr.data['detail']);
+                console.log('Status: ', objErr.data['status'], ' Not Found');
+                console.log('Please make sure appropriate latitude and logitude values are requested and within the United States. ');
+            });
+    }
+}
+
 render(<WeatherBar/>)
