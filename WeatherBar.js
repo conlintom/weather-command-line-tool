@@ -53,7 +53,7 @@ class WeatherBar extends React.Component {
         const periods = this.state.periods;
         // if periods isn't 0 length - strigify the first element of periods, otherwise indicate that the 
         // request is loading.
-        
+        console.log(periods)
         // Check if periods has values
         if (!periods.length){
             return (
@@ -91,37 +91,23 @@ class WeatherBar extends React.Component {
         program
             .version('0.1.0')
             .description('An application for current weather')
-            .option('-a, --latitude <decimal>', 'Add latitude to be searched', '42.349295')
-            .option('-b, --longitude <decimal>', 'Add longitude to be searched', '-71.048731')
+            .option('-x, --latitude <decimal>', 'Add latitude to be searched', '42.349295')
+            .option('-y, --longitude <decimal>', 'Add longitude to be searched', '-71.048731')
         
         program.parse(process.argv);
 
         let lat = program.latitude;
         let lon = program.longitude;
 
-        // use axios to make the request to the weather api - promise
-
-        // todo - wrap api call in a class - adapter
+        let self = this;
 
         const req = new WeatherAPIRequest(lat, lon);
 
-        req.makeRequest();
+        const resp = req.makeRequest();
 
-        /*
-        axios.get("https://api.weather.gov/points/" + lat + "," + lon + "/forecast")
-            .then(function (res) {
-                self.setState({
-                    periods: res.data.properties.periods
-                });
-            })
-            // catch request errors
-            .catch(function (err) {
-                const objErr = err.response;
-                console.log(objErr.data['detail']);
-                console.log('Status: ', objErr.data['status'], ' Not Found');
-                console.log('Please make sure appropriate latitude and logitude values are requested and within the United States. ');
-            });
-        */
+        self.setState({
+            periods: resp
+        });
     }
 }
 
@@ -132,14 +118,10 @@ class WeatherAPIRequest {
     }
     makeRequest() {
 
-        let self = this;
-
         axios.get("https://api.weather.gov/points/" + this.lat + "," + this.lon + "/forecast")
             .then(function (res) {
-                self.setState({
-                    // data returned has keys: data, properies, and periods
-                    periods: res.data.properties.periods
-                });
+                let period = res.data.properties.periods
+                return period;
             })
             // catch request errors
             .catch(function (err) {
@@ -147,7 +129,7 @@ class WeatherAPIRequest {
                 console.log(objErr.data['detail']);
                 console.log('Status: ', objErr.data['status'], ' Not Found');
                 console.log('Please make sure appropriate latitude and logitude values are requested and within the United States. ');
-            });
+            }); 
     }
 }
 
