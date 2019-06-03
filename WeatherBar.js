@@ -1,20 +1,61 @@
-
 const React = require('react');
 const {render, Box, Color, Text} = require('ink');
-const axios = require('axios');
 const program = require('commander');
+const weather = require('./Adapter/weather.js')
 
 // todo - ticker
 
-// create color map to hold colors
 const colorMap  = {
     header: [173, 171, 171],
     freezing: [153, 0, 153], 
     cold: [41, 168, 242], 
     mild: [37, 232, 76], 
-    hot: [255, 0, 0]
+    hot: [255, 0, 0],
+    error: [255, 12, 12]
 };
 
+function displayWeather(temp, type, time, measure, speed, detail) {
+    return(
+         <Box textWrap = 'wrap' padding = {2}> 
+             <Color rgb={colorMap.header}>   
+                 <Text bold>{'The'} {type} {time} {'temperature is: \n'}</Text>
+             </Color>
+             <Color rgb={colorMap[type]}>
+                 {temp} degrees {measure}{'\n'}
+             </Color>
+             <Color rgb={colorMap.header}>
+                 <Text bold>{'The wind speed is:'}{'\n'}</Text>
+             </Color>
+             <Color rgb={colorMap[type]}>
+                 {speed}{'\n'}
+             </Color>
+             <Color rgb={colorMap.header}>
+                 <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
+             </Color>
+             <Color rgb={colorMap[type]}>
+                 {detail}
+             </Color>
+         </Box>
+    );
+ }
+
+ function displayError(errorMessage){
+    <Box textWrap = 'wrap' padding = {2}>
+        <Color rgb={colorMap.error}>
+            <Text bold> {errorMessage.data['detail']} {'\n'} </Text>
+            <Text bold> {'Status: '} {errorMessage.data['status']} {' Not Found \n'} </Text>
+            <Text bold> Please make sure appropriate latitude and logitude values are requested and within the United States. </Text>
+        </Color>
+    </Box>
+}
+
+ function displayLoading(){
+    return(
+        <Box>
+            Loading...
+        </Box>
+    );
+ }
 
 class WeatherBar extends React.Component {
     constructor(props) {
@@ -24,42 +65,12 @@ class WeatherBar extends React.Component {
         };
     }
 
-    formatOutput(temp, type, time, measure, speed, detail){
-       return(
-            <Box textWrap = 'wrap' padding = {2}> 
-                <Color rgb={colorMap.header}>   
-                    <Text bold>{'The'} {type} {time} {'temperature is: \n'}</Text>
-                </Color>
-                <Color rgb={colorMap[type]}>
-                    {temp} degrees {measure}{'\n'}
-                </Color>
-                <Color rgb={colorMap.header}>
-                    <Text bold>{'The wind speed is:'}{'\n'}</Text>
-                </Color>
-                <Color rgb={colorMap[type]}>
-                    {speed}{'\n'}
-                </Color>
-                <Color rgb={colorMap.header}>
-                    <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
-                </Color>
-                <Color rgb={colorMap[type]}>
-                    {detail}
-                </Color>
-            </Box>
-       );
-    }
-
     render() {
         const periods = this.state.periods;
-        // if periods isn't 0 length - strigify the first element of periods, otherwise indicate that the 
-        // request is loading.
-        //console.log(periods)
-        // Check if periods has values
+        
         if (!periods.length){
             return (
-                <Box>
-                    Loading...
-                </Box>
+                displayLoading()
             );
         }
 
@@ -76,14 +87,13 @@ class WeatherBar extends React.Component {
         const mild = 70;
         let tempType = '';
 
-        // Assign tempType
         (temp <= freezing) ? tempType = 'freezing' : tempType;
         (temp <= cold && temp > freezing) ? tempType = 'cold' : tempType;
         (temp >= cold && temp <= mild) ? tempType = 'mild': tempType;
         (temp > mild) ? tempType = 'hot' : tempType;
 
         return(
-            this.formatOutput(temp, tempType, timeDay, tempMeasure, windSpeed, detailForecast, colorMap.header)
+           displayWeather(temp, tempType, timeDay, tempMeasure, windSpeed, detailForecast, colorMap.header)
         );     
     }
     componentDidMount() {
@@ -101,38 +111,18 @@ class WeatherBar extends React.Component {
 
         let self = this;
 
-        const req = new WeatherAPIRequest(lat, lon);
-
-        const resp = req.makeRequest();
-
-        resp.then(function (res) {
-            self.setState({
-                periods: res.data.properties.periods
-            });
-            
-            
+        weather.readByCoordinates(lat, lon)        
+            .then(res => {
+                self.setState({
+                    periods: res
+                });
         })
-        // catch request errors
-        .catch(function (err) {
-            const objErr = err.response;
-            console.log(objErr.data['detail']);
-            console.log('Status: ', objErr.data['status'], ' Not Found');
-            console.log('Please make sure appropriate latitude and logitude values are requested and within the United States. ');
-        });
+            .catch(err => {
+                const objErr = err.response;
+                displayError(objErr)
+            });
     }
 }
 
-class WeatherAPIRequest {
-    constructor(lat, lon) {
-        this.lat = lat;
-        this.lon = lon;
-    }
-    makeRequest() {
-
-        const resp = axios.get("https://api.weather.gov/points/" + this.lat + "," + this.lon + "/forecast")
-
-        return resp;
-    }
-}
 
 render(<WeatherBar/>)
