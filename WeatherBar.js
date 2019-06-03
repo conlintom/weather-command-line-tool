@@ -40,13 +40,15 @@ function displayWeather(temp, type, time, measure, speed, detail) {
  }
 
  function displayError(errorMessage){
-    <Box textWrap = 'wrap' padding = {2}>
-        <Color rgb={colorMap.error}>
-            <Text bold> {errorMessage.data['detail']} {'\n'} </Text>
-            <Text bold> {'Status: '} {errorMessage.data['status']} {' Not Found \n'} </Text>
-            <Text bold> Please make sure appropriate latitude and logitude values are requested and within the United States. </Text>
-        </Color>
-    </Box>
+    return(
+        <Box textWrap = 'wrap' padding = {2}>
+            <Color rgb={colorMap.error}>
+                <Text bold> {errorMessage.data['detail']} {'\n'} </Text>
+                <Text bold> {'Status: '} {errorMessage.data['status']} {' Not Found \n'} </Text>
+                <Text bold> Please make sure appropriate latitude and logitude values are requested and within the United States. </Text>
+            </Color>
+        </Box>
+    );
 }
 
  function displayLoading(){
