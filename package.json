@@ -1,7 +1,7 @@
 {
   "name": "weather-command-line-tool",
   "version": "1.0.0",
-  "description": "Experimenting with a command line tool to collect weather information for a given location.",
+  "description": "Command line tool to request weather for a given latitude and longitude within the United States.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/conlintom/weather-command-line-tool.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Tom Conlin",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/conlintom/weather-command-line-tool/issues"
