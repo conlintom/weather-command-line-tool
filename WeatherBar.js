@@ -1,7 +1,7 @@
 const React = require('react');
 const {render, Box, Color, Text} = require('ink');
 const program = require('commander');
-const weather = require('./Adapter/weather.js')
+const weather = require('./adapters/weather.js')
 
 // todo - ticker
 
@@ -15,6 +15,7 @@ const colorMap  = {
 };
 
 function displayWeather(temp, type, time, measure, speed, detail) {
+    // todo - add lines depending on the number of lines of the detailed forecast
     return(
          <Box textWrap = 'wrap' padding = {2}> 
              <Color rgb={colorMap.header}>   
@@ -33,7 +34,8 @@ function displayWeather(temp, type, time, measure, speed, detail) {
                  <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
              </Color>
              <Color rgb={colorMap[type]}>
-                 {detail}
+                {detail}
+                <Text> {'\n\n'} </Text>
              </Color>
          </Box>
     );
