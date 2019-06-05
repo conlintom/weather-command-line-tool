@@ -1,5 +1,6 @@
 
+require('import-jsx')('./WeatherBar');
 
-module.exports = function() { 
+exports.expWeather = function() {
     require('import-jsx')('./WeatherBar');
-}
+};
