@@ -1,6 +1,6 @@
 {
   "name": "weather-command-line-tool",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Command line tool to request weather for a given latitude and longitude within the United States.",
   "main": "index.js",
   "scripts": {
@@ -18,13 +18,10 @@
   },
   "homepage": "https://github.com/conlintom/weather-command-line-tool#readme",
   "dependencies": {
-    "applicationinsights": "^1.3.1",
     "axios": "^0.18.0",
-    "babel-cli": "^6.26.0",
     "import-jsx": "^2.0.0",
     "ink": "^2.1.1",
     "ink-text-input": "^3.1.1",
     "react": "^16.8.6"
-  },
-  "devDependencies": {}
+  }
 }
