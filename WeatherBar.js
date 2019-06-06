@@ -1,7 +1,7 @@
 const React = require('react');
 const {render, Box, Color, Text} = require('ink');
 const program = require('commander');
-const weather = require('./adapters/weather.js')
+const weather = require('weather-data')
 
 // todo - ticker
 

@@ -1,6 +1,6 @@
 {
   "name": "weather-command-line-tool",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Command line tool to request weather for a given latitude and longitude within the United States.",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "import-jsx": "^2.0.0",
     "ink": "^2.1.1",
     "ink-text-input": "^3.1.1",
-    "react": "^16.8.6"
+    "react": "^16.8.6",
+    "weather-data": "file:../weather-data"
   }
 }
