@@ -1,7 +1,7 @@
 const React = require('react');
 const {render, Box, Color, Text} = require('ink');
 const program = require('commander');
-const weather = require('weather-data')
+const weather = require('../weather-data')
 
 // todo - ticker
 
@@ -127,6 +127,5 @@ class WeatherBar extends React.Component {
             });
     }
 }
-
 
 render(<WeatherBar/>)
