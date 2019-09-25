@@ -1,7 +1,7 @@
 const React = require('react');
 const {render, Box, Color, Text} = require('ink');
 const program = require('commander');
-const weather = require('../weather-data')
+const weather = require('./../weather-data/index.js')
 
 // todo - ticker
 
@@ -14,40 +14,34 @@ const colorMap  = {
     error: [255, 12, 12]
 };
 
-function displayWeather(temp, type, time, measure, speed, detail) {
-    // todo - add lines depending on the number of lines of the detailed forecast
+/*
+function displayWeather(temp, type, min, max, pressure, hubmidity, descrp, icon, perCloudy, city, speed, date, lat, lon) {
+    // TODO: reformat for new API/data
     return(
          <Box textWrap = 'wrap' padding = {2}> 
              <Color rgb={colorMap.header}>   
-                 <Text bold>{'The'} {type} {time} {'temperature is: \n'}</Text>
+                 <Text bold>{'The weather on'} {date} {'for'} {city} {'('} {lat} {','} {lon} {') \n'}</Text>
              </Color>
-             <Color rgb={colorMap[type]}>
-                 {temp} degrees {measure}{'\n'}
-             </Color>
-             <Color rgb={colorMap.header}>
-                 <Text bold>{'The wind speed is:'}{'\n'}</Text>
-             </Color>
-             <Color rgb={colorMap[type]}>
-                 {speed}{'\n'}
-             </Color>
-             <Color rgb={colorMap.header}>
-                 <Text bold>{'The detailed forecast is:'}{'\n'}</Text>
-             </Color>
-             <Color rgb={colorMap[type]}>
-                {detail}
-                <Text> {'\n\n'} </Text>
-             </Color>
+             
          </Box>
     );
  }
+ */
+
+function displayWeather(perObj) {
+    // TODO: reformat for new API/data
+    return(
+         <Box textWrap = 'wrap' padding = {2}>  
+            <Text bold>{perObj}</Text>             
+         </Box>
+    );
+}
 
  function displayError(errorMessage){
     return(
         <Box textWrap = 'wrap' padding = {2}>
             <Color rgb={colorMap.error}>
-                <Text bold> {errorMessage.data['detail']} {'\n'} </Text>
-                <Text bold> {'Status: '} {errorMessage.data['status']} {' Not Found \n'} </Text>
-                <Text bold> Please make sure appropriate latitude and logitude values are requested and within the United States. </Text>
+                <Text bold> {errorMessage err} {'\n'} </Text>
             </Color>
         </Box>
     );
@@ -56,10 +50,12 @@ function displayWeather(temp, type, time, measure, speed, detail) {
  function displayLoading(){
     return(
         <Box>
-            Loading...
+            <Text bold>Loading... </Text>
         </Box>
     );
- }
+}
+
+
 
 class WeatherBar extends React.Component {
     constructor(props) {
@@ -70,21 +66,33 @@ class WeatherBar extends React.Component {
     }
 
     render() {
+        console.log(this.state.periods);
         const periods = this.state.periods;
         
         if (!periods.length){
-            return (
+            return( 
                 displayLoading()
             );
         }
 
-        // Get the temperature, windspeed, time of day, and detailed forcast
-        const perObj = periods[0];
-        const timeDay = (perObj[Object.keys(perObj)[4]] == true) ? 'day time' : 'night time';
-        const tempMeasure = perObj[Object.keys(perObj)[6]];
-        const temp = perObj[Object.keys(perObj)[5]];
-        const windSpeed = perObj[Object.keys(perObj)[8]];
-        const detailForecast = perObj[Object.keys(perObj)[12]];
+        return(
+            <Box> {periods} </Box>
+        );
+
+        /*
+        const temp = perObj.list[0].main.temp;
+        const tempMin = perObj.list[0].main.temp_min;
+        const tempMax = perObj.list[0].main.temp_max;
+        const pressure = perObj.list[0].main.pressure;
+        const humidity = perObj.list[0].main.humidity;
+        const description = perObj.list[0].weather[0].description;
+        const icon = perObj.list[0].weather[0].icon;
+        const percentCloudy = perObj.list[0].clouds.all;
+        const city = perObj.city.name;
+        const windSpeed = perObj.list[0].wind.speed;
+        const weatherDate = perObj.list[0].dt_txt;
+        const lat = perObj.city.coord.lat;
+        const lon = perObj.city.coord.lon;
 
         const freezing = 32;
         const cold = 40;
@@ -97,33 +105,41 @@ class WeatherBar extends React.Component {
         (temp > mild) ? tempType = 'hot' : tempType;
 
         return(
-           displayWeather(temp, tempType, timeDay, tempMeasure, windSpeed, detailForecast, colorMap.header)
-        );     
+           displayWeather(temp, tempMin, tempMax, tempType, pressure, humidity, description, icon, percentCloudy, city, windSpeed, weatherDate, lat, lon)
+        );
+        */
+
     }
     componentDidMount() {
-       // implemented commander
         program
             .version('0.1.0')
             .description('An application for current weather')
             .option('-x, --latitude <decimal>', 'Add latitude to be searched', '42.349295')
             .option('-y, --longitude <decimal>', 'Add longitude to be searched', '-71.048731')
-        
+            .option('-u, --units [string]', 'Units for results to be returned in', 'imperial')
+            .option('-a, --apikey <string>', 'API Key for Request', '')
+            .option('-t, --type [string]', 'Request type: US, global-current, global-weekly', 'global-current')
+
         program.parse(process.argv);
 
-        let lat = program.latitude;
-        let lon = program.longitude;
+        //console.log(props);
+
+        let latitude = program.latitude;
+        let longitude = program.longitude;
+        let units = program.units;
+        let apiKey = program.apikey;
 
         let self = this;
-
-        weather.readByCoordinates(lat, lon)        
+        
+        weather.globalCoordinatesWeekly(latitude, longitude, apiKey, units)
             .then(res => {
                 self.setState({
                     periods: res
                 });
-        })
+            })
             .catch(err => {
-                const objErr = err.response;
-                displayError(objErr)
+                const objErr = err;
+                displayError(objErr);
             });
     }
 }
