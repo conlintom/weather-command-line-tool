@@ -41,7 +41,7 @@ function displayWeather(perObj) {
     return(
         <Box textWrap = 'wrap' padding = {2}>
             <Color rgb={colorMap.error}>
-                <Text bold> {errorMessage err} {'\n'} </Text>
+                <Text bold> {errorMessage} {'err \n'} </Text>
             </Color>
         </Box>
     );
