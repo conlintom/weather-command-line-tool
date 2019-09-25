@@ -41,7 +41,7 @@ function displayWeather(perObj) {
     return(
         <Box textWrap = 'wrap' padding = {2}>
             <Color rgb={colorMap.error}>
-                <Text bold> {errorMessage} {'err \n'} </Text>
+                <Text bold> {errorMessage} {'\n'} </Text>
             </Color>
         </Box>
     );
@@ -66,17 +66,21 @@ class WeatherBar extends React.Component {
     }
 
     render() {
-        console.log(this.state.periods);
         const periods = this.state.periods;
-        
-        if (!periods.length){
+        if (!Object.keys(this.state.periods).length){
             return( 
-                displayLoading()
+                <Box>
+                    <Text bold>Loading... </Text>
+                </Box>
             );
         }
-
+        
         return(
-            <Box> {periods} </Box>
+            <div>
+                {periods[0].dt_txt}
+                {periods[0].main.temp}
+            </div>
+                
         );
 
         /*
@@ -110,7 +114,7 @@ class WeatherBar extends React.Component {
         */
 
     }
-    componentDidMount() {
+    componentWillMount() {
         program
             .version('0.1.0')
             .description('An application for current weather')
@@ -122,8 +126,6 @@ class WeatherBar extends React.Component {
 
         program.parse(process.argv);
 
-        //console.log(props);
-
         let latitude = program.latitude;
         let longitude = program.longitude;
         let units = program.units;
@@ -134,7 +136,7 @@ class WeatherBar extends React.Component {
         weather.globalCoordinatesWeekly(latitude, longitude, apiKey, units)
             .then(res => {
                 self.setState({
-                    periods: res
+                    periods: res.list
                 });
             })
             .catch(err => {
