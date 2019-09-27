@@ -1,5 +1,5 @@
 const React = require('react');
-const {render, Box, Color, Text, Static} = require('ink');
+const {render, Box, Color, Text} = require('ink');
 const program = require('commander');
 const weather = require('./../weather-data/index.js')
 
@@ -19,10 +19,35 @@ function displayWeather(perObj) {
     const perObjList = perObj.list
     return(
         <Box flexDirection='column'>
+            <Box paddingBottom={3}>
+                Country/City: {perObj.city.country} | {perObj.city.name} 
+                {'\n'}Latitude: {perObj.city.coord.lat}
+                {'\n'}Longitude: {perObj.city.coord.lon}
+            </Box>
             {perObjList.map(item => (
-                <Box key={item.dt_txt}>Date/Time={item.dt_txt}</Box>,
-                <Box marginRight={1} key={item.main.temp}>Temp={item.main.temp}</Box>
+                <Box paddingBottom={6} key={item.dt_txt}>
+                    Date/Time:        {item.dt_txt}
+                    {'\n'}
+                    Temperatue:       {item.main.temp}
+                    {'\n'}
+                    Min Temperature:  {item.main.temp_min}
+                    {'\n'}
+                    Max Temperature:  {item.main.temp_max}
+                    {'\n'}
+                    Humidity:         {item.main.humidity}
+                    {'\n'}
+                    Wind Speed:       {item.wind.speed}
+                </Box>
             ))}
+        </Box>
+    );
+ }
+
+ function displaySummaryDetails(perObj) {
+    const perObjList = perObj.list
+    return(
+        <Box flexDirection='column'>
+            {perObjList.city}
         </Box>
     );
  }
