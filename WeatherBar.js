@@ -1,9 +1,9 @@
 const React = require('react');
 const {render, Box, Color, Text} = require('ink');
+const BigText = require('ink-big-text');
+const InkBox = require('ink-box');
 const program = require('commander');
 const weather = require('./../weather-data/index.js')
-
-// todo - ticker
 
 const colorMap  = {
     header: [173, 171, 171],
@@ -17,26 +17,29 @@ const colorMap  = {
 
 function displayWeather(perObj) {
     const perObjList = perObj.list
+    
     return(
+                  
         <Box flexDirection='column'>
+            <BigText text='Weather Results'/>
             <Box paddingBottom={3}>
-                Country/City: {perObj.city.country} | {perObj.city.name} 
+                {'\n'}Country/City: '/> {perObj.city.country} | {perObj.city.name} 
                 {'\n'}Latitude: {perObj.city.coord.lat}
                 {'\n'}Longitude: {perObj.city.coord.lon}
             </Box>
-            {perObjList.map(item => (
+            {perObjList.map(item => ( 
                 <Box paddingBottom={6} key={item.dt_txt}>
-                    Date/Time:        {item.dt_txt}
+                    <Text bold><Color rgb={colorMap.header}>Date/Time:</Color> </Text>           <Color rgb={colorMap.mild}>{item.dt_txt}</Color>
                     {'\n'}
-                    Temperatue:       {item.main.temp}
+                    <Text bold><Color rgb={colorMap.header}>Temperatue:</Color> </Text>          <Color rgb={colorMap.mild}>{item.main.temp}</Color>
                     {'\n'}
-                    Min Temperature:  {item.main.temp_min}
+                    <Text bold><Color rgb={colorMap.header}>Min Temperature:</Color> </Text>     <Color rgb={colorMap.mild}>{item.main.temp_min}</Color>
                     {'\n'}
-                    Max Temperature:  {item.main.temp_max}
+                    <Text bold><Color rgb={colorMap.header}>Max Temperature:</Color> </Text>     <Color rgb={colorMap.mild}>{item.main.temp_max}</Color>
                     {'\n'}
-                    Humidity:         {item.main.humidity}
+                    <Text bold><Color rgb={colorMap.header}>Humidity:</Color> </Text>            <Color rgb={colorMap.mild}>{item.main.humidity}%</Color>
                     {'\n'}
-                    Wind Speed:       {item.wind.speed}
+                    <Text bold><Color rgb={colorMap.header}>Wind Speed:</Color> </Text>          <Color rgb={colorMap.mild}>{item.wind.speed}</Color>
                 </Box>
             ))}
         </Box>
@@ -65,7 +68,7 @@ function displayWeather(perObj) {
  function displayLoading(){
     return(
         <Box>
-            <Text bold>Loading... </Text>
+            <Text bold> Loading... </Text>
         </Box>
     );
 }
