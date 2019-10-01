@@ -22,35 +22,21 @@ function displayWeather(perObj) {
                   
         <Box flexDirection='column'>
             <BigText text='Weather Results'/>
-            <Box paddingBottom={3}>
-                {'\n'}Country/City: '/> {perObj.city.country} | {perObj.city.name} 
-                {'\n'}Latitude: {perObj.city.coord.lat}
-                {'\n'}Longitude: {perObj.city.coord.lon}
-            </Box>
+            <InkBox borderStyle="round" borderColor="cyan" float="left" padding={1}>
+                <Color rgb={colorMap.header}> {perObj.city.country} | {perObj.city.name} </Color>
+                <Color rgb={colorMap.header}> Latitude: </Color> <Color magenta>{perObj.city.coord.lat} </Color>
+                <Color rgb={colorMap.header}> Longitude: </Color> <Color magenta>{perObj.city.coord.lon} </Color>
+            </InkBox>
             {perObjList.map(item => ( 
-                <Box paddingBottom={6} key={item.dt_txt}>
-                    <Text bold><Color rgb={colorMap.header}>Date/Time:</Color> </Text>           <Color rgb={colorMap.mild}>{item.dt_txt}</Color>
-                    {'\n'}
-                    <Text bold><Color rgb={colorMap.header}>Temperatue:</Color> </Text>          <Color rgb={colorMap.mild}>{item.main.temp}</Color>
-                    {'\n'}
-                    <Text bold><Color rgb={colorMap.header}>Min Temperature:</Color> </Text>     <Color rgb={colorMap.mild}>{item.main.temp_min}</Color>
-                    {'\n'}
-                    <Text bold><Color rgb={colorMap.header}>Max Temperature:</Color> </Text>     <Color rgb={colorMap.mild}>{item.main.temp_max}</Color>
-                    {'\n'}
-                    <Text bold><Color rgb={colorMap.header}>Humidity:</Color> </Text>            <Color rgb={colorMap.mild}>{item.main.humidity}%</Color>
-                    {'\n'}
-                    <Text bold><Color rgb={colorMap.header}>Wind Speed:</Color> </Text>          <Color rgb={colorMap.mild}>{item.wind.speed}</Color>
-                </Box>
+                <InkBox key={item.dt_txt} borderStyle="round" borderColor="cyan" float="left" padding={1}>
+                    <Color rgb={colorMap.header}>Date/Time:</Color> <Color rgb={colorMap.mild}>{item.dt_txt}</Color>
+                    <Color rgb={colorMap.header}> Temperature:</Color> <Color rgb={colorMap.mild}>{item.main.temp}</Color>
+                    <Color rgb={colorMap.header}> Min Temperature:</Color> <Color rgb={colorMap.mild}>{item.main.temp_min}</Color>
+                    <Color rgb={colorMap.header}> Max Temperature:</Color> <Color rgb={colorMap.mild}>{item.main.temp_max}</Color>
+                    <Color rgb={colorMap.header}> Humidity:</Color> <Color rgb={colorMap.mild}>{item.main.humidity}%</Color>
+                    <Color rgb={colorMap.header}> Wind Speed:</Color> <Color rgb={colorMap.mild}>{item.wind.speed}</Color>
+                </InkBox>
             ))}
-        </Box>
-    );
- }
-
- function displaySummaryDetails(perObj) {
-    const perObjList = perObj.list
-    return(
-        <Box flexDirection='column'>
-            {perObjList.city}
         </Box>
     );
  }
